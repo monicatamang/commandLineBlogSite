@@ -1,14 +1,17 @@
 import dbcreds
 import mariadb
 import traceback
+import re
 
 def create_blog_post():
     try:
         print(f"\nNew Blog Post by @{username_login}")
         print("------------------------------ \n")
-        blog_content = input("Enter text here: \n\n")
+        blog_content_string = input("Enter text here: \n\n")
 
-        cursor.execute(f"INSERT INTO blog_post(username, content) VALUES('{username_login}', '{blog_content}')")
+        blog_content_escape = re.sub(r"\'", r"\\'", blog_content_string)
+
+        cursor.execute(f"INSERT INTO blog_post(username, content) VALUES('{username_login}', '{blog_content_escape}')")
         conn.commit()
 
         print(f"\n@{username_login}'s blog post was successfully uploaded. \n")
@@ -47,11 +50,22 @@ def get_selection():
                 print("\nInvalid selection. \n")
             break
         except ValueError:
-            print("\nInvalid data entry. Expected a numerical value. \n")
+            print("\nInvalid data entry. Expected a numeric value. \n")
             traceback.print_exc()
         except:
             print("\n An error has occured. \n")
             traceback.print_exc()
+
+def run_application():
+    while(True):
+        check_user_exit = input("Would you like to exit the Blog Site? Y/N: ")
+        if(check_user_exit == "Y" or check_user_exit == "y"):
+            print("\nThank you for visiting the Blog Site!")
+            break
+        elif(check_user_exit == "N" or check_user_exit == "n"):
+            get_selection()
+        else:
+            print("\nInvalid selection.")  
 
 def check_user_login():
     while(True):
@@ -71,18 +85,7 @@ def check_user_login():
                     return database_user_login_info[i][0]
         except:
             print(f"\nAn error has occured. Failed to retrieve @{username}'s login information. \n")
-            traceback.print_exc()
-
-def run_application():
-    while(True):
-        check_user_exit = input("Would you like to exit the Blog Site? Y/N: ")
-        if(check_user_exit == "Y" or check_user_exit == "y"):
-            print("\nThank you for visiting the Blog Site!")
-            break
-        elif(check_user_exit == "N" or check_user_exit == "n"):
-            get_selection()
-        else:
-            print("\nInvalid selection.")    
+            traceback.print_exc()  
 
 try:
     conn = mariadb.connect(user=dbcreds.user, password=dbcreds.password, host=dbcreds.host, port=dbcreds.port, database=dbcreds.database)
