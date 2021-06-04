@@ -4,20 +4,25 @@ import traceback
 import re
 
 def create_blog_post():
-    try:
-        print(f"\nNew Blog Post by @{username_login}")
-        print("------------------------------ \n")
-        blog_content_string = input("Enter text here: \n\n")
+    while(True):
+        try:
+            print(f"\nNew Blog Post by @{username_login}")
+            print("------------------------------ \n")
+            blog_content_string = input("Enter text here: \n\n")
 
-        blog_content_escape = re.sub(r"\'", r"\\'", blog_content_string)
+            if(blog_content_string == ""):
+                print("Invalid entry. Please re-enter your entry.")
+            else:
+                blog_content_escape = re.sub(r"\'", r"\\'", blog_content_string)
 
-        cursor.execute(f"INSERT INTO blog_post(username, content) VALUES('{username_login}', '{blog_content_escape}')")
-        conn.commit()
+                cursor.execute(f"INSERT INTO blog_post(username, content) VALUES('{username_login}', '{blog_content_escape}')")
+                conn.commit()
 
-        print(f"\n@{username_login}'s blog post was successfully uploaded. \n")
-    except:
-        print("\nAn error occured. Failed to upload post. \n")
-        traceback.print_exc()
+                print(f"\n@{username_login}'s blog post was successfully uploaded. \n")
+                break
+        except:
+            print("\nAn error occured. Failed to upload post. \n")
+            traceback.print_exc()
 
 def view_all_blog_posts():
     try:
