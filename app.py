@@ -31,7 +31,7 @@ def view_all_blog_posts():
             for i in range (len(all_blog_posts)):
                 for j in range (len(all_blog_posts[i])):
                     print(f"{all_blog_posts[i][j]} \n")
-                print("------------------------------")
+                print("------------------------------ \n")
     except:
         print("An error has occured. Failed to view all posts.")
         traceback.print_exc()
@@ -64,12 +64,24 @@ def get_username():
         else:
             print("Username exceeds 100 characters.")
 
+def run_application():
+    while(True):
+        check_user_exit = input("Would you like to exit the Blog Site? Y/N: ")
+        if(check_user_exit == "Y" or "y"):
+            print("\nThank you for visiting the Blog Site!")
+            break
+        elif(check_user_exit == "N" or "n"):
+            get_selection()
+        else:
+            print("Invalid selection.")
+
 username = get_username()
 
 try:
     conn = mariadb.connect(user=dbcreds.user, password=dbcreds.password, host=dbcreds.host, port=dbcreds.port, database=dbcreds.database)
     cursor = conn.cursor()
     get_selection()
+    run_application()
 except:
     print("An error in the database has occured.")
     traceback.print_exc()
