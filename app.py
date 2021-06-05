@@ -19,11 +19,11 @@ def create_blog_post():
             # If the user enters a valid entry, upload their blog post to the database
             else:
                 # Using the regular expression library in python, escape all apostrophes found in the user's input
-                # Subtitute each apostrophe in the user's input and replace it with a backlash and single quote to escape it then store the "escaped" user input as a variable
+                # Subtitute each apostrophe in the user's input and replace it with a backslash and single quote to escape it then store the "escaped" user input as a variable
                 # Note: I was running into issues where whenever a user would enter words that contain apostrophes (i.e., can't, don't, etc.), mariadb would intepret the apostrophe as a metacharacter rather than a string which would result in an error and would fail to upload the user's post
                 blog_content_escape = re.sub(r"\'", r"\\'", blog_content_string)
 
-                # Add the user's username and blog post content into the database and commit the changes
+                # Adding the user's username and blog post content into the database and committing the changes
                 cursor.execute(f"INSERT INTO blog_post(username, content) VALUES('{username_login}', '{blog_content_escape}')")
                 conn.commit()
 
@@ -74,16 +74,16 @@ def get_selection():
             # If the user wants to create a blog post, call the create_blog_post function
             if(selection == 1):
                 create_blog_post()
-                # After the function runs, the loop will break and the remaining code in the run_application function will run which will give the user the option to leave the site
+                # After the function runs, the loop will break and the code in the run_application function will run which will give the user the option to leave the site
                 break
             # If the user wants to view all blog posts, call the view_all_blog_posts function
             elif(selection == 2):
                 view_all_blog_posts()
-                # After the function runs, the loop will break and the remaining code in the run_application function will run which will give the user the option to leave the site
+                # After the function runs, the loop will break and the code in the run_application function will run which will give the user the option to leave the site
                 break
             # If the user enters an invalid selection other than 1 or 2, print an error message to the user and prompt the user to make their selection again
             else:
-                print("\nInvalid selection.\n")
+                print("\nInvalid selection.")
                 continue
         except ValueError:
             # If the user enters anything but a numeric datatype, print an error message to the user and the traceback
@@ -129,9 +129,9 @@ def check_user_login():
             cursor.execute("SELECT username, password FROM users")
             database_user_login_info = cursor.fetchall()
 
-            # Since the database returns the information as a list of tuples, for every list, verify the user's login credentials
+            # Since the database returns the information as a list of tuples, for each tuple in every list, verify the user's login credentials
             for i in range (len(database_user_login_info)):
-                # If the user's username provided matches with the username stored in the database and the user's password provided matches with the password stored in the database, print a login success message to the user and return the user's username
+                # If the username and password the user provided matches with the username and password stored in the database, print a login success message to the user and return the user's username
                 if(database_user_login_info[i][0] == username and database_user_login_info[i][1] == password):
                     print("\nYou have successfully logged in.")
                     return database_user_login_info[i][0]
@@ -145,7 +145,7 @@ def check_user_login():
 
 # Creating a try block to catch runtime errors associated with connecting with the database and creating a cursor
 try:
-    # Setting up the connection with the database
+    # Connecting to the database
     conn = mariadb.connect(user=dbcreds.user, password=dbcreds.password, host=dbcreds.host, port=dbcreds.port, database=dbcreds.database)
 
     # Creating a cursor
@@ -154,7 +154,7 @@ try:
     # Authenticating the user's login information and storing the user's login username as a variable
     username_login = check_user_login()
 
-    # If the user has logged in successfully, call the functions to show the user their options on the Blog Site and continue running the application
+    # If the user has logged in successfully, call the functions to show the user the menu options on the Blog Site and continue running the application
     get_selection()
     run_application()
 except:
