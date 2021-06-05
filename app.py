@@ -41,8 +41,8 @@ def create_blog_post():
 def view_all_blog_posts():
     # Creating a try block that catches runtime errors associated with getting the blog posts from the database
     try:
-        # Get the username and content from the blog_post table in the database and store the information as a variable
-        cursor.execute("SELECT username, content FROM blog_post")
+        # Get all posts from the blog_post table in the database and store the information as a variable
+        cursor.execute("SELECT * FROM blog_post")
         all_blog_posts = cursor.fetchall()
         
         # If there are no blog posts, print a message to the user
